@@ -56,9 +56,10 @@ namespace BaseRestApi.Data
                 Update_at = user.Update_at,
                 Purchase_order = user.Purchase_order,
                 Total_sales = user.Total_sales,
+                
                 Branch = selectedBranch
             };
-
+            Console.WriteLine(newUser);
             Context.Users.Add(newUser);
             Context.SaveChanges();
         }
@@ -72,18 +73,16 @@ namespace BaseRestApi.Data
             {
                 currentUser.Firstname = editUser.Firstname;
             }
-
             if (editUser.Lastname != "")
             {
                 currentUser.Lastname = editUser.Lastname;
             }
-
             if (editUser.Phone != "")
             {
                 currentUser.Phone = editUser.Phone;
             }
-
-            if(editUser.Img_profile != ""){
+            //? ส่วน Upload Img 
+            if(editUser.Img_profile != null){
                 currentUser.Img_profile = editUser.Img_profile;
             }
 
@@ -92,14 +91,9 @@ namespace BaseRestApi.Data
             //     currentUser.PasswordHash = editUser.PasswordHash;
             // }
 
-
             currentUser.Branch = branchEdit;
 
-          
-
-
             Context.SaveChanges();
-
         }
 
         public void DeleteUser(int userId)

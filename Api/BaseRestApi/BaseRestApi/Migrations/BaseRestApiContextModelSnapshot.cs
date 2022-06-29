@@ -31,7 +31,6 @@ namespace BaseRestApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
                     b.Property<string>("Namebranch")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -47,7 +46,7 @@ namespace BaseRestApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("BranchID")
+                    b.Property<int?>("BranchID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Create_at")
@@ -101,9 +100,7 @@ namespace BaseRestApi.Migrations
                 {
                     b.HasOne("BaseRestApi.Models.Branch", "Branch")
                         .WithMany("Users")
-                        .HasForeignKey("BranchID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BranchID");
 
                     b.Navigation("Branch");
                 });

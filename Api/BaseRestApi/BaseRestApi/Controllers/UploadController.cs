@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using BaseRestApi.DTO;
+using BaseRestApi.Utility.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -14,10 +16,15 @@ namespace BaseRestApi.Controllers
     public class UploadController : Controller
     {
         private readonly ILogger<UploadController> _logger;
+        private ITrace Trace { get; }
 
-        public UploadController(ILogger<UploadController> logger)
+        private IWebHostEnvironment environment;
+
+        public UploadController(ILogger<UploadController> logger, ITrace Trace,IWebHostEnvironment environment)
         {
             _logger = logger;
+            this.Trace = Trace;
+            // this.environment = environment;
         }
 
         public IActionResult Index()
@@ -26,10 +33,12 @@ namespace BaseRestApi.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadProfile()
+        public async Task<Result<String>> UploadProfile()
         {
+            Result<string> result = new Result<string>(Trace);
             try
             {
+                // environment.roo
                 var formCollection = await Request.ReadFormAsync();
                 var file = formCollection.Files.First();
                 // var file = Request.Form.Files[0];
@@ -37,23 +46,32 @@ namespace BaseRestApi.Controllers
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 if (file.Length > 0)
                 {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                   
+                    var fileName = $"{DateTime.Now.ToFileTime()}.png";
                     var fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(folderName, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-                    return Ok(new { dbPath });
+                    result.Success = true;
+                    result.Data = dbPath;
+                    result.Message = "Success";
+                    return result;
                 }
                 else
                 {
-                    return BadRequest();
+                    result.Success = false;
+                    result.Message = "Failed";
+                    return result;
                 }
             }
             catch (Exception e)
             {
-                return StatusCode(500, $"Internal Server Error: {e}");
+                result.Success = false;
+                result.Message = "Failed";
+                return result;
+                // return StatusCode(500, $"Internal Server Error: {e}");
             }
 
         }

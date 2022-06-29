@@ -33,7 +33,7 @@ namespace BaseRestApi.Services
             Console.WriteLine("TESTTTTTTTTTTTTTTTTTTTTTTT");
 
             Result<string> result = new Result<string>(Trace);
-            bool isHaveBranch = UserRepository.CheckBranchById(user.Branch.ID);
+            bool isHaveBranch = UserRepository.CheckBranchById(user.Branch.ID.Value);
             if (!isHaveBranch)
             {
                 result.Message = "Branch Id นี้ ไม่มีข้อมูล";
@@ -51,7 +51,7 @@ namespace BaseRestApi.Services
         {
             Result<string> result = new Result<string>(Trace);
             bool isHaveUser = UserRepository.CheckUserById(user.ID.Value);
-            bool isHaveBranch = UserRepository.CheckBranchById(user.Branch.ID);
+            bool isHaveBranch = UserRepository.CheckBranchById(user.Branch.ID.Value);
 
             if(!isHaveUser)
             {

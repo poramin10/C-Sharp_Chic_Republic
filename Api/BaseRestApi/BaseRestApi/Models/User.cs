@@ -14,7 +14,7 @@ namespace BaseRestApi.Models
         public string Firstname {get;set;} = string.Empty;
         public string Lastname {get;set;} = string.Empty;
         public string Phone {get;set;} = string.Empty;
-        public string Img_profile {get;set;} = string.Empty;
+        public string? Img_profile {get;set;} = string.Empty;
         public DateTime Create_at {get;set;} 
         public DateTime Update_at {get;set;} 
         public int Purchase_order {get;set;} = 0;

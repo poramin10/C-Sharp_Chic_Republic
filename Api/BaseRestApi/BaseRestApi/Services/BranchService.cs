@@ -67,7 +67,7 @@ namespace BaseRestApi.Services
         public Result<string> EditBranch(BranchDto branch)
         {
             Result<string> result = new Result<string>(Trace);
-            bool isHaveBranch = BranchRepository.CheckBranchById(branch.ID);
+            bool isHaveBranch = BranchRepository.CheckBranchById(branch.ID.Value);
             if(!isHaveBranch)
             {
                 result.Message = AppSettings.ErrorMessage.EmptyBranchId;
